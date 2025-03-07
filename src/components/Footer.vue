@@ -16,10 +16,14 @@
   <style scoped>
   /* Базовые стили для мобильных устройств */
   footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
     background-color: #1C466D;
     padding: 1rem;
     color: white;
     text-align: center;
+    width: 100%;
   }
   
   footer nav {
