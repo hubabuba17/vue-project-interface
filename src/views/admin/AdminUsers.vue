@@ -14,7 +14,7 @@
           <template #body="slotProps">
             <Button
               icon="pi pi-pencil"
-              class="p-button-rounded p-button-success p-mr-2"
+              class="p-button-rounded p-button-success"
               @click="editUser(slotProps.data.id)"
             />
             <Button
