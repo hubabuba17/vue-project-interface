@@ -1,30 +1,58 @@
 <template>
-  <div>
-    <h1>Управление заказами</h1>
-    <Button label="⬅ Назад" @click="goBack" class="p-button-secondary" />
-    <section class="admin-content">
-      <p>Здесь вы можете управлять заказами, разрешать споры и контролировать возвраты.</p>
-      <DataTable :value="orders" responsiveLayout="scroll">
-        <Column field="id" header="ID заказа"></Column>
-        <Column field="customer" header="Покупатель"></Column>
-        <Column field="status" header="Статус"></Column>
-        <Column header="Действия">
-          <template #body="slotProps">
-            <Button
-              label="Разрешить спор"
-              class="p-button-success p-mr-2"
-              @click="resolveOrder(slotProps.data.id)"
-            />
-            <Button
-              label="Отменить заказ"
-              class="p-button-danger"
-              @click="cancelOrder(slotProps.data.id)"
-            />
-          </template>
-        </Column>
-      </DataTable>
+  <main>
+    <header class="page-header">
+      <h1>Управление заказами</h1>
+      <Button 
+        label="⬅ Назад" 
+        @click="goBack" 
+        class="p-button-secondary"
+        aria-label="Вернуться в панель администратора"
+      />
+    </header>
+
+    <section class="admin-content" aria-labelledby="orders-description">
+      <p id="orders-description">
+        Здесь вы можете управлять заказами, разрешать споры и контролировать возвраты.
+      </p>
+      
+      <article aria-label="Список заказов">
+        <DataTable 
+          :value="orders" 
+          responsiveLayout="scroll"
+          aria-label="Таблица заказов"
+          rowHover
+        >
+          <Column field="id" header="ID заказа" sortable></Column>
+          <Column field="customer" header="Покупатель" sortable></Column>
+          <Column field="status" header="Статус" sortable>
+            <template #body="{data}">
+              <span :class="'status-badge status-' + data.status.toLowerCase()">
+                {{ data.status }}
+              </span>
+            </template>
+          </Column>
+          <Column header="Действия">
+            <template #body="slotProps">
+              <div class="action-buttons">
+                <Button
+                  label="Разрешить спор"
+                  class="p-button-success"
+                  @click="resolveOrder(slotProps.data.id)"
+                  :aria-label="`Разрешить спор по заказу #${slotProps.data.id}`"
+                />
+                <Button
+                  label="Отменить заказ"
+                  class="p-button-danger"
+                  @click="cancelOrder(slotProps.data.id)"
+                  :aria-label="`Отменить заказ #${slotProps.data.id}`"
+                />
+              </div>
+            </template>
+          </Column>
+        </DataTable>
+      </article>
     </section>
-  </div>
+  </main>
 </template>
 
 <script setup>
@@ -51,9 +79,19 @@ const goBack = () => {
 </script>
 
 <style scoped>
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
 h1 {
   color: #1C466D;
   text-align: center;
+  width: 100%;
+  margin-bottom: 0;
 }
 
 .admin-content {
@@ -62,16 +100,49 @@ h1 {
   padding: 1rem;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-в обработке {
+  background-color: #e1f5fe;
+  color: #0288d1;
+}
+
+.status-доставлен {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
 /* Стили для планшетов и десктопов */
 @media (min-width: 768px) {
+  .page-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
   .admin-content {
     max-width: 90%;
+  }
+  
+  .action-buttons {
+    flex-wrap: nowrap;
   }
 }
 
 @media (min-width: 1024px) {
   .admin-content {
-    max-width: 800px;
+    max-width: 1200px;
   }
 }
 </style>

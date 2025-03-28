@@ -1,32 +1,65 @@
 <template>
-  <div>
-    <h1>Управление пользователями</h1>
-    <div class="button-group">
-      <Button label="⬅ Назад" @click="goBack" class="p-button-secondary" />
-      <Button label="Создать пользователя" @click="createUser" class="p-button-primary" />
-    </div>
-    <section class="admin-content">
-      <DataTable :value="users" responsiveLayout="scroll">
-        <Column field="id" header="ID"></Column>
-        <Column field="name" header="Имя"></Column>
-        <Column field="email" header="Email"></Column>
-        <Column header="Действия">
+  <main>
+    <header class="page-header">
+      <h1>Управление пользователями</h1>
+      <div class="action-bar">
+        <Button 
+          label="⬅ Назад" 
+          @click="goBack" 
+          class="p-button-secondary"
+          aria-label="Вернуться в панель администратора"
+        />
+        <Button
+          label="Создать пользователя"
+          @click="createUser"
+          class="p-button-primary"
+          aria-label="Создать нового пользователя"
+          icon="pi pi-plus"
+        />
+      </div>
+    </header>
+
+    <section class="admin-content" aria-labelledby="users-description">
+      <DataTable 
+        :value="users" 
+        responsiveLayout="scroll"
+        aria-label="Таблица пользователей"
+        paginator :rows="10"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+        currentPageReportTemplate="Показано {first} - {last} из {totalRecords} пользователей"
+      >
+        <Column field="id" header="ID" :sortable="true"></Column>
+        <Column field="name" header="Имя" :sortable="true"></Column>
+        <Column field="email" header="Email" :sortable="true">
+          <template #body="{data}">
+            <a :href="`mailto:${data.email}`" aria-label="Написать письмо пользователю">
+              {{ data.email }}
+            </a>
+          </template>
+        </Column>
+        <Column header="Действия" :exportable="false">
           <template #body="slotProps">
-            <Button
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-success"
-              @click="editUser(slotProps.data.id)"
-            />
-            <Button
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-danger"
-              @click="deleteUser(slotProps.data.id)"
-            />
+            <div class="action-buttons">
+              <Button
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-success p-mr-2"
+                @click="editUser(slotProps.data.id)"
+                :aria-label="`Редактировать пользователя ${slotProps.data.name}`"
+                v-tooltip.top="'Редактировать'"
+              />
+              <Button
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger"
+                @click="deleteUser(slotProps.data.id)"
+                :aria-label="`Удалить пользователя ${slotProps.data.name}`"
+                v-tooltip.top="'Удалить'"
+              />
+            </div>
           </template>
         </Column>
       </DataTable>
     </section>
-  </div>
+  </main>
 </template>
 
 <script setup>
@@ -57,25 +90,42 @@ const goBack = () => {
 </script>
 
 <style scoped>
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
 h1 {
   color: #1C466D;
   text-align: center;
+  margin-bottom: 1rem;
 }
 
-.button-group {
+.action-bar {
   display: flex;
   gap: 1rem;
-  padding: 0 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
 }
 
 .admin-content {
   max-width: 100%;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0 1rem;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 /* Стили для планшетов и десктопов */
 @media (min-width: 768px) {
+  .action-bar {
+    justify-content: flex-start;
+    padding: 0 1rem;
+  }
+  
   .admin-content {
     max-width: 90%;
   }
@@ -83,7 +133,16 @@ h1 {
 
 @media (min-width: 1024px) {
   .admin-content {
-    max-width: 800px;
+    max-width: 1200px;
+  }
+  
+  .action-bar {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  h1 {
+    margin-bottom: 0;
   }
 }
 </style>
