@@ -1,11 +1,14 @@
 <template>
     <footer>
       <p>&copy; 2023 Маркетплейс. Все права защищены.</p>
-      <nav>
+      <nav aria-label="Дополнительная навигация">
         <router-link to="/privacy-policy">Политика конфиденциальности</router-link>
         <router-link to="/return-policy">Политика возвратов</router-link>
         <router-link to="/terms-of-service">Пользовательское соглашение</router-link>
       </nav>
+      <address>
+        Контакты: <a href="mailto:info@example.com">info@example.com</a>
+      </address>
     </footer>
   </template>
   

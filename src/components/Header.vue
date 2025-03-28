@@ -1,6 +1,6 @@
 <template>
     <header>
-      <nav>
+      <nav aria-label="Основная навигация">
         <router-link to="/">Главная</router-link>
         <router-link to="/about">О компании</router-link>
         <router-link to="/contacts">Контакты</router-link>

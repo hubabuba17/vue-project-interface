@@ -2,9 +2,9 @@
   <div>
     <Header />
     <main>
-      <h1>Добро пожаловать на наш маркетплейс!</h1>
-      <section class="categories">
-        <h2>Популярные категории</h2>
+      <h1>Добро пожаловать</h1>
+      <section aria-labelledby="categories-heading">
+        <h2 id="categories-heading">Популярные категории</h2>
         <div class="category-list">
           <div class="category-item" v-for="category in categories" :key="category.id">
             <img :src="category.image" :alt="category.name" />
@@ -12,8 +12,8 @@
           </div>
         </div>
       </section>
-      <section class="promotions">
-        <h2>Акции</h2>
+      <section aria-labelledby="promotions-heading">
+        <h2 id="promotions-heading">Акции</h2>
         <div class="promotion-list">
           <div class="promotion-item" v-for="promotion in promotions" :key="promotion.id">
             <img :src="promotion.image" :alt="promotion.title" />
